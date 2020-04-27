@@ -26,7 +26,6 @@ pipeline {
             }
         }
         stage ("lint dockerfile") {
-            //https://github.com/hadolint/hadolint/blob/master/docs/INTEGRATION.md
             agent {
                 docker {
                     image 'hadolint/hadolint:latest-debian'
