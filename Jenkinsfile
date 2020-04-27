@@ -24,7 +24,7 @@ pipeline {
                     pylint --disable=R,C,W1203 app/**.py
                 '''
             }
-        }
+        }/*
         stage ("lint dockerfile") {
             agent {
                 docker {
@@ -38,7 +38,7 @@ pipeline {
                 always {
                     archiveArtifacts 'hadolint_lint.txt'
                 }
-            }
+            }*/
         }
         stage('Build Docker image') {
             steps {
