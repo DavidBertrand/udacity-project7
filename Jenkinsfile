@@ -38,8 +38,8 @@ pipeline {
                 always {
                     archiveArtifacts 'hadolint_lint.txt'
                 }
-            }*/
-        }
+            }
+        }*/
         stage('Build Docker image') {
             steps {
                 sh '''dockerpath="bertrand282/project7"
