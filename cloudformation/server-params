@@ -1,0 +1,22 @@
+[
+    {
+        "ParameterKey": "EnvironmentName",
+        "ParameterValue": "CapStone"
+    },
+    {
+        "ParameterKey": "KeyPairName",
+        "ParameterValue": "udacity"
+    },
+     {
+        "ParameterKey": "WebServerInstanceType",
+        "ParameterValue": "t2.micro"
+    },
+    {
+        "ParameterKey": "RemoteAccessCIDR",
+        "ParameterValue": "84.17.40.110/32"
+    },
+    {
+        "ParameterKey": "NumWebHosts",
+        "ParameterValue": "2"
+    }
+]

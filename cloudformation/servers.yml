@@ -1,0 +1,253 @@
+Description: >
+    Udagram Project: this script deploys 4 servers in a private network to run the Udagram web site from  code stored on an s3 bucket.
+    A bastion host is running in a pulic network to allow secure SSH access to the 4 webservers.
+
+Parameters:
+
+    EnvironmentName:
+        Description: An environment name that will be prefixed to resource names
+        Type: String
+    WebServerInstanceType:
+      AllowedValues:
+        - t2.nano
+        - t2.micro
+        - t2.small
+        - t2.medium
+        - t2.large
+        - t3.micro
+        - t3.small
+        - t3.medium
+        - t3.large
+        - t3.xlarge
+        - t3.2xlarge
+        - m3.large
+        - m3.xlarge
+        - m3.2xlarge
+        - m4.large
+        - m4.xlarge
+        - m4.2xlarge
+        - m4.4xlarge
+      Default: t2.micro
+      Description: Amazon EC2 instance type for the WebServers instances.
+      Type: String
+    KeyPairName:
+        Description: Key pair name used to access the Bastion Host
+        Type: String
+    RemoteAccessCIDR:
+        Description: Remote CIDR allowed to access Bastion Hosts 
+        Type: String
+    NumWebHosts:
+        Description: Number of WebServers
+        Type: String
+        
+
+Resources:
+
+  
+  ProfileWithRolesForOurApp:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Roles:
+        - UdacityS3ReadOnlyEC2
+  LBSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to our load balancer
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${EnvironmentName}-VPCID"
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+  WebServerSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to our hosts and SSH from local only
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${EnvironmentName}-VPCID"
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        #CidrIp: 0.0.0.0/0
+        CidrIp: 
+          !Sub "${LinuxBastionHost1.PrivateIp}/32"
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        #CidrIp: 0.0.0.0/0
+        CidrIp: 
+          !Sub "${LinuxBastionHost2.PrivateIp}/32"
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: 0
+        ToPort: 65535
+        CidrIp: 0.0.0.0/0
+  WebAppLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install unzip awscli -y
+          apt-get install apache2 -y
+          systemctl start apache2.service
+          cd /var/www/html
+          aws s3 cp s3://udacity-demo-1/udacity.zip .
+          unzip -o udacity.zip
+      ImageId: ami-010a96c958f9ee5cf # this AMI ID may not be available. Find a new base line Ubuntu image.
+      KeyName: !Ref KeyPairName
+      SecurityGroups:
+      - Ref: WebServerSecGroup
+      IamInstanceProfile: 
+        Ref: "ProfileWithRolesForOurApp"
+      InstanceType: !Ref WebServerInstanceType
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sdk"
+        Ebs:
+          VolumeSize: '10'
+  WebAppGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier:
+      - Fn::ImportValue: 
+          !Sub "${EnvironmentName}-PRIV-NETS"
+      LaunchConfigurationName:
+        Ref: WebAppLaunchConfig
+      MinSize: !Ref NumWebHosts
+      MaxSize: !Ref NumWebHosts
+      TargetGroupARNs:
+      - Ref: WebAppTargetGroup
+  WebAppLB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Subnets:
+      - Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
+      - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
+      SecurityGroups:
+      - Ref: LBSecGroup
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn:
+          Ref: WebAppTargetGroup
+      LoadBalancerArn:
+        Ref: WebAppLB
+      Port: '80'
+      Protocol: HTTP
+  ALBListenerRule:
+      Type: AWS::ElasticLoadBalancingV2::ListenerRule
+      Properties:
+        Actions:
+        - Type: forward
+          TargetGroupArn: !Ref 'WebAppTargetGroup'
+        Conditions:
+        - Field: path-pattern
+          Values: [/]
+        ListenerArn: !Ref 'Listener'
+        Priority: 1
+  WebAppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 8
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      VpcId: 
+        Fn::ImportValue:
+          Fn::Sub: "${EnvironmentName}-VPCID"
+  BastionSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allows port inbound for SSH to our bastion host
+      GroupName: linux-bastion-ssh
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${EnvironmentName}-VPCID"
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '22'
+        ToPort: '22'
+        CidrIp: !Ref RemoteAccessCIDR
+  LinuxBastionHost1:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - BastionSecurityGroup
+    Properties:
+      #ImageId: ami-d874e0a0 # this AMI ID may not be available. Find a new base line Ubuntu image.
+      ImageId: ami-0edf3b95e26a682df # this AMI ID may not be available. Find a new base line Ubuntu image.
+      
+      InstanceType: t2.micro
+      KeyName: !Ref KeyPairName
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet:
+            - Ref: BastionSecurityGroup
+          SubnetId: 
+            Fn::ImportValue: 
+              !Sub "${EnvironmentName}-PUB1-SN" 
+  LinuxBastionHost2:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - BastionSecurityGroup
+    Properties:
+      #ImageId: ami-d874e0a0 # this AMI ID may not be available. Find a new base line Ubuntu image.
+      ImageId: ami-0edf3b95e26a682df # this AMI ID may not be available. Find a new base line Ubuntu image.
+      
+      InstanceType: t2.micro
+      KeyName: udacity
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet:
+            - Ref: BastionSecurityGroup
+          SubnetId: 
+            Fn::ImportValue: 
+              !Sub "${EnvironmentName}-PUB2-SN"         
+
+Outputs: 
+  # This is also optional.
+  # Bonus points for useful outputs!
+  # for example, if you create a Load Balancer
+  # it's nice to output the URL to it here, so that we don't have to go to the console to get it
+
+  UdagramURL: 
+    Description: The DNSName of the load balancer
+    Value: !Join ["", ["http://", !GetAtt WebAppLB.DNSName,]]
+    Export:
+      Name: !Sub ${EnvironmentName}-url
+
+  BastionIP1:
+    Description: The IP of the Bastion Host in AZ1
+    Value: !GetAtt LinuxBastionHost1.PublicIp
+    Export:
+      Name: !Sub ${EnvironmentName}-BastionIP1
+
+  BastionIP2:
+    Description: The IP of the Bastion Host in AZ2
+    Value: !GetAtt LinuxBastionHost2.PublicIp
+    Export:
+      Name: !Sub ${EnvironmentName}-BastionIP2
+    
+    
+
