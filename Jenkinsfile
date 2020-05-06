@@ -1,6 +1,6 @@
 pipeline {
      agent any
-     stages {/*
+     stages {
         stage('install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
@@ -8,7 +8,7 @@ pipeline {
                     make install
                     '''
             }
-        }
+        }/*
         stage('Build') {
             steps {
                 sh 'echo "Hello World"'
@@ -72,6 +72,7 @@ pipeline {
              
             steps {
                 sh ''' . venv/bin/activate
+                ansible --version
                 ansible all -m ping -i hosts'
                  '''       
             }
