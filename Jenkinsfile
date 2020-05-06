@@ -71,13 +71,10 @@ pipeline {
         stage('Ansible Deploy') {
              
             steps {
-                 
-              dir('dev/ansible')
-              {
-               
+                              
                sh 'ansible all -m ping -i hosts'
                
-            }
+            
             }
         }
        
