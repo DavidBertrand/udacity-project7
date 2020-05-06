@@ -73,7 +73,7 @@ pipeline {
             steps {
                 sh ''' . venv/bin/activate
                 ansible --version
-                ansible all -m ping -i hosts'
+                ansible all -m ping -i hosts
                  '''       
             }
         }
