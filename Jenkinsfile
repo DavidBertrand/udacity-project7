@@ -71,10 +71,9 @@ pipeline {
         stage('Ansible Deploy') {
              
             steps {
-                              
-               sh 'ansible all -m ping -i hosts'
-               
-            
+                sh ''' . venv/bin/activate
+                ansible all -m ping -i hosts'
+                 '''       
             }
         }
        
