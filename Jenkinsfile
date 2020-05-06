@@ -1,6 +1,6 @@
 pipeline {
      agent any
-     stages {
+     stages {/*
         stage('install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
@@ -24,7 +24,7 @@ pipeline {
                     pylint --disable=R,C,W1203 app/**.py
                 '''
             }
-        }/*
+        }
         stage ("lint dockerfile") {
             agent {
                 docker {
@@ -39,7 +39,7 @@ pipeline {
                     archiveArtifacts 'hadolint_lint.txt'
                 }
             }
-        }*/
+        }
         stage('Build Docker image') {
             steps {
                 sh '''dockerpath="bertrand282/project7"
@@ -55,7 +55,7 @@ pipeline {
                 }
             }
         }
-
+*/
         stage('Ansible Init') {
             steps {
                 script {
