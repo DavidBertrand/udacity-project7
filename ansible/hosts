@@ -1,4 +1,3 @@
 [Master]
-35.160.185.92 ansible_connection=ssh ansible__user=ubuntu
-[Slaves]
-54.191.79.239 ansible_connection=ssh ansible__user=ubuntu
+54.70.42.170         ansible_connection=ssh        ansible_user=ubuntu
+
