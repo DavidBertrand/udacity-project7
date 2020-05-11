@@ -69,10 +69,10 @@ pipeline {
         
         stage('Ansible Deploy') {
             steps {
-                 dir('ansible')
+
+                    def image_id = 'bertrand282/project7'
+                    dir('ansible')
                     {
-                    image_id="bertrand282/project7"
-                    //def image_id = 'bertrand282/project7'
                     sh "ansible-playbook playbook.yml --extra-vars \"image_id=${image_id}\""
                 }
   
