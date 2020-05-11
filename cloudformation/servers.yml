@@ -65,6 +65,10 @@ Resources:
         ToPort: 22
         #CidrIp: 0.0.0.0/0
         CidrIp: !Ref RemoteAccessCIDR
+      - IpProtocol: tcp
+        FromPort: 0
+        ToPort: 65535
+        CidrIp: !Ref PublicSubnet1CIDR
       SecurityGroupEgress:
       - IpProtocol: tcp
         FromPort: 0

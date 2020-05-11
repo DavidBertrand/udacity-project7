@@ -1,6 +1,6 @@
 pipeline {
      agent any
-     stages {
+     stages {/*
         stage('install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
@@ -71,10 +71,12 @@ pipeline {
         stage('Ansible Deploy') {
              
             steps {
-                sh ''' . venv/bin/activate
-                ansible --version
-                ansible all -m ping -i hosts
-                 '''       
+                 dir('ansible')
+                    {
+                    def image_id = bertrand282/project7
+                    sh "ansible-playbook  ansible\playbook.yml --extra-vars \"image_id=${image_id}\""
+                }
+  
             }
         }
        
