@@ -63,17 +63,15 @@ pipeline {
                def tfHome = tool name: 'Ansible'
                 env.PATH = "${tfHome}:${env.PATH}"
                  sh 'ansible --version'
-                    
-            }
+              }
             }
         }
         
         stage('Ansible Deploy') {
-             
             steps {
                  dir('ansible')
                     {
-                    def image_id = bertrand282/project7
+                    def image_id = 'bertrand282/project7'
                     sh "ansible-playbook playbook.yml --extra-vars \"image_id=${image_id}\""
                 }
   
