@@ -37,7 +37,6 @@ pipeline {
                 }
             }
         }
-        }
         stage('Build Docker image') {
             steps {
                 sh '''dockerpath="bertrand282/project7"
