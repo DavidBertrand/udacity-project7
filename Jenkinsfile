@@ -1,4 +1,8 @@
 pipeline {
+    environment {
+        registry = "bertrand282/project7"
+        registryCredential = ‘dockerhub’
+    }
      agent any
      stages {/*
         stage('install dependencies') {
@@ -51,7 +55,7 @@ pipeline {
         }
         stage('Publish') {
             steps {
-                withDockerRegistry([ credentialsId: "bertrand282", url: "" ]) {
+                withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
                     sh 'docker push bertrand282/project7'
                 }
             }
