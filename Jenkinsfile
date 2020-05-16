@@ -55,7 +55,7 @@ pipeline {
         }
         stage('Publish') {
             steps {
-                withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
+                withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
                     sh 'docker push bertrand282/project7'
                 }
             }
