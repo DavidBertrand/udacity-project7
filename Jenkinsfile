@@ -23,11 +23,11 @@ pipeline {
             }
         }
         stage('Lint app') {
-            steps {/*
+            steps {
                 sh ''' . venv/bin/activate
                     pylint --disable=R,C,W1203 app/**.py
-                    '''*/
-                sh    'pylint --disable=R,C,W1203 app/**.py'
+                    '''
+                //sh    'pylint --disable=R,C,W1203 app/**.py'
             }
         }
        stage ("lint dockerfile") {
