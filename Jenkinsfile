@@ -4,7 +4,7 @@ pipeline {
         registryCredential = 'dockerhub'
     }
      agent any
-     stages {
+     stages {/*
         stage('install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
@@ -59,7 +59,7 @@ pipeline {
                     sh 'docker push bertrand282/project7'
                 }
             }
-        }
+        }*/
 
         stage('Ansible Init') {
             steps {
