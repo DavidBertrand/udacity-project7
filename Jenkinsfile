@@ -64,10 +64,11 @@ pipeline {
         stage('Ansible Init') {
             steps {
                 script {
-                
-               /*def tfHome = tool name: 'Ansible'
+                    /*def tfHome = tool name: 'Ansible'
                 env.PATH = "${tfHome}:${env.PATH}"*/
-                 sh 'ansible --version'
+                sh ''' . venv/bin/activate
+                    ansible --version'
+                    '''
               }
             }
         }
@@ -75,9 +76,10 @@ pipeline {
         stage('Ansible Deploy') {
             steps {
                 script {
-                
+                    
                     def image_id = 'bertrand282/project7'
  //                       sh "ansible-playbook playbook.yml --extra-vars \"image_id=${image_id}\""
+                        sh ". venv/bin/activate"
                         sh "ansible-playbook  playbook.yml --private-key=~/.ssh/udacity.pem --extra-vars \"image_id=${image_id}\" -vvv"
                     }
             }
