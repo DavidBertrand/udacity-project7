@@ -4,7 +4,7 @@ pipeline {
         registryCredential = 'dockerhub'
     }
      agent any
-     stages {/*
+     stages {
         stage('install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
@@ -12,7 +12,7 @@ pipeline {
                     make install
                     '''
             }
-        }*/
+        }
         stage('Build') {
             steps {
                 sh 'echo "Hello World"'
@@ -24,9 +24,9 @@ pipeline {
         }
         stage('Lint app') {
             steps {
-                /*sh ''' . venv/bin/activate
+                sh ''' . venv/bin/activate
                 sh    pylint --disable=R,C,W1203 app/**.py
-                '''*/
+                '''
                 sh    'pylint --disable=R,C,W1203 app/**.py'
             }
         }
