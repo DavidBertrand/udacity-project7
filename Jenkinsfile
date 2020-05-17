@@ -67,7 +67,7 @@ pipeline {
                     /*def tfHome = tool name: 'Ansible'
                 env.PATH = "${tfHome}:${env.PATH}"*/
                 sh ''' . venv/bin/activate
-                    ansible --version'
+                    ansible --version
                     '''
               }
             }
