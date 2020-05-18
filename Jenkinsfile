@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        registry = "bertrand282/project7"
+        registry = "bertrand282/project7:latest"
         registryCredential = 'dockerhub'
     }
      agent any
@@ -27,7 +27,6 @@ pipeline {
                 sh ''' . venv/bin/activate
                     pylint --disable=R,C,W1203 app/**.py
                     '''
-                //sh    'pylint --disable=R,C,W1203 app/**.py'
             }
         }
        stage ("lint dockerfile") {
@@ -47,16 +46,16 @@ pipeline {
         }
         stage('Build Docker image') {
             steps {
-                sh '''dockerpath="bertrand282/project7"
-                    # Build image and add a descriptive tag
-                    docker build --tag=$dockerpath .    
-                    '''
+                
+                    // Build image and add a descriptive tag
+                  sh 'docker build --tag=$registry .'    
+                    
             }
         }
         stage('Publish') {
             steps {
                 withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
-                    sh 'docker push bertrand282/project7'
+                    sh 'docker push $registry'
                 }
             }
         }
@@ -64,8 +63,6 @@ pipeline {
         stage('Ansible Init') {
             steps {
                 script {
-                    /*def tfHome = tool name: 'Ansible'
-                env.PATH = "${tfHome}:${env.PATH}"*/
                 sh ''' . venv/bin/activate
                     ansible --version
                     '''
