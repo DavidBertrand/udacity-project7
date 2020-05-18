@@ -4,8 +4,8 @@ pipeline {
         registryCredential = 'dockerhub'
     }
      agent any
-     stages {
-        stage('install dependencies') {
+     stages {/*
+        stage('Install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
                     . venv/bin/activate
@@ -28,7 +28,7 @@ pipeline {
                     pylint --disable=R,C,W1203 app/**.py
                     '''
             }
-        }
+        }*/
         stage ('OWASP Dependency-Check Vulnerabilities') {
             steps {
                 dependencyCheck additionalArguments: ''' 
@@ -40,7 +40,7 @@ pipeline {
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }     
-       stage ("lint dockerfile") {
+       stage ("Lint dockerfile") {
             agent {
                 docker {
                     image 'hadolint/hadolint:latest-debian'
