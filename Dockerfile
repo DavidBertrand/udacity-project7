@@ -1,4 +1,4 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.6
+FORM tiangolo/uwsgi-nginx-flask:python3.6
 
 WORKDIR /app
 
@@ -15,10 +15,10 @@ RUN pip install --upgrade pip==20.0.2 &&\
 
 # set an environmental variable, MESSAGE,
 # which the app will use and display
-ENV MESSAGE "hello from David's Docker"
+ENV MESSAGE "hello from David' Docker"
 
 # Expose port 80
 EXPOSE 80
 
 # Run app.py at container launch
-CMD ["python", "main.py"
+CMD ["python", "main.py"]
