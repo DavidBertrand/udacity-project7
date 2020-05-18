@@ -21,4 +21,4 @@ ENV MESSAGE "hello from David's Docker"
 EXPOSE 80
 
 # Run app.py at container launch
-CMD ["python", "main.py"]
+CMD ["python", "main.py"
