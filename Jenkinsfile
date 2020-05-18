@@ -42,7 +42,7 @@ pipeline {
         } 
         stage ('ZAP'){
             steps {
-                sh 'ansible-playbook -i inventories/inventory_dev run-owasp-analysis.yml -e owasp_scan_dir="" -e owasp_report_file="owasp-report.html" -vvvv'
+                sh 'ansible-playbook -i inventories/inventory_dev /opt/owasp/ansible/run-owasp-analysis.yml -e owasp_scan_dir="app/" -e owasp_report_file="owasp-report.html" -vvvv'
             }
         }    
         stage ("Lint dockerfile") {
@@ -88,14 +88,15 @@ pipeline {
         
         stage('Ansible Deploy') {
             steps {
-                script {
-                    
-                    def image_id = 'bertrand282/project7'
- //                       sh "ansible-playbook playbook.yml --extra-vars \"image_id=${image_id}\""
-                        sh ''' . venv/bin/activate
-                            ansible-playbook  playbook.yml --private-key=~/.ssh/udacity.pem --extra-vars image_id=$registry -vvv
-                            '''
-                    }
+                dir('ansible'){
+                    script {
+                        def image_id = 'bertrand282/project7'
+    //                       sh "ansible-playbook playbook.yml --extra-vars \"image_id=${image_id}\""
+                            sh ''' . venv/bin/activate
+                                ansible-playbook  ansible/playbook.yml --private-key=~/.ssh/udacity.pem --extra-vars image_id=$registry -vvv
+                                '''
+                        }
+                }
             }
         }
        
