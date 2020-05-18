@@ -42,7 +42,10 @@ pipeline {
         } 
         stage ('ZAP'){
             steps {
-                sh 'ansible-playbook -i inventories/inventory_dev /opt/owasp/ansible/run-owasp-analysis.yml -e owasp_scan_dir="app/" -e owasp_report_file="owasp-report.html" -vvvv'
+                sh 'rm owasp* || true'
+                sh 'wget https://raw.githubusercontent.com/cehkunal/webapp/master/owasp-check.sh'
+                sh 'chmod x owasp-dependency-check.sh'
+                sh 'bash owasp-dependency-check.sh'
             }
         }    
         stage ("Lint dockerfile") {
