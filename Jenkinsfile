@@ -12,7 +12,7 @@ pipeline {
                     make install
                     '''
             }
-        }/*
+        }
         stage('Build') {
             steps {
                 sh 'echo "Hello World"'
@@ -59,7 +59,7 @@ pipeline {
                     sh 'docker push bertrand282/project7'
                 }
             }
-        }*/
+        }
 
         stage('Ansible Init') {
             steps {

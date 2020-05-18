@@ -15,7 +15,7 @@ RUN pip install --upgrade pip==20.0.2 &&\
 
 # set an environmental variable, MESSAGE,
 # which the app will use and display
-ENV MESSAGE "hello from Docker"
+ENV MESSAGE "hello from David's Docker"
 
 # Expose port 80
 EXPOSE 80
