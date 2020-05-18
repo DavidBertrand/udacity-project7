@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        registry = "bertrand282/project7:latest"
+        registry = "bertrand282/project7_2:latest"
         registryCredential = 'dockerhub'
     }
      agent any
@@ -29,6 +29,17 @@ pipeline {
                     '''
             }
         }
+        stage ('OWASP Dependency-Check Vulnerabilities') {
+            steps {
+                dependencyCheck additionalArguments: ''' 
+                    -o "./" 
+                    -s "./"
+                    -f "ALL" 
+                    --prettyPrint''', odcInstallation: 'OWASP-DC'
+
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+            }
+        }     
        stage ("lint dockerfile") {
             agent {
                 docker {
