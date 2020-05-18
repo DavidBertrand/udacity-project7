@@ -39,8 +39,13 @@ pipeline {
 
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
-        }     
-       stage ("Lint dockerfile") {
+        } 
+        stage ('ZAP'){
+            steps {
+                sh 'ansible-playbook -i inventories/inventory_dev run-owasp-analysis.yml -e owasp_scan_dir="" -e owasp_report_file="owasp-report.html" -vvvv'
+            }
+        }    
+        stage ("Lint dockerfile") {
             agent {
                 docker {
                     image 'hadolint/hadolint:latest-debian'
