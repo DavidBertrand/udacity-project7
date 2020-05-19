@@ -28,7 +28,7 @@ pipeline {
                     pylint --disable=R,C,W1203 app/**.py
                     '''
             }
-        }*/
+        }*//*
         stage ('OWASP Dependency-Check Vulnerabilities') {
             steps {
                 dependencyCheck additionalArguments: ''' 
@@ -39,13 +39,12 @@ pipeline {
 
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
-        } 
-        stage ('ZAP'){
+        } */
+        stage ('OWASP Dependency-Check Vulnerabilities'){
             steps {
                 sh 'rm owasp* || true'
-                sh 'wget https://raw.githubusercontent.com/cehkunal/webapp/master/owasp-dependency-check.sh'
-                sh 'chmod +x owasp-dependency-check.sh'
-                sh 'bash owasp-dependency-check.sh'
+                sh 'chmod +x run_owasp-dependency-check.sh'
+                sh 'bash run_owasp-dependency-check.sh'
             }
         }    
         stage ("Lint dockerfile") {
