@@ -40,7 +40,7 @@ pipeline {
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         } 
-
+/*
         stage ('OWASP Dependency-Check Vulnerabilities - Docker'){
             steps {
                 sh 'rm owasp* || true'
@@ -48,7 +48,7 @@ pipeline {
                 sh 'bash run_owasp_dependency_check.sh'
             }
         }    
-
+*/
         stage ("Lint dockerfile") {
             agent {
                 docker {
