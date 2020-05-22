@@ -74,7 +74,7 @@ pipeline {
         }
         stage('Security Scan') {
               steps { 
-                 aquaMicroscanner imageName: registry, notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
+                 aquaMicroscanner imageName: 'bertrand282/project7_2', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
               }
          } 
         stage('Publish') {
