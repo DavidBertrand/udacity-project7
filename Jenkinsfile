@@ -40,6 +40,12 @@ pipeline {
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         } */
+        stage('Security Scan') {
+              steps { 
+                 aquaMicroscanner imageName: 'alpine:latest', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
+              }
+         } 
+         
         stage ('OWASP Dependency-Check Vulnerabilities'){
             steps {
                 sh 'rm owasp* || true'
@@ -47,6 +53,7 @@ pipeline {
                 sh 'bash run_owasp_dependency_check.sh'
             }
         }    
+
         stage ("Lint dockerfile") {
             agent {
                 docker {
@@ -99,6 +106,11 @@ pipeline {
                         sh 'ansible-playbook  playbook.yml --private-key=~/.ssh/udacity.pem --extra-vars image_id=$registry -vvv'
                     }
                 }
+            }
+        }
+        stage('Test Application'){
+            steps{
+                sh 'run_app_status_check.sh'
             }
         }
        
