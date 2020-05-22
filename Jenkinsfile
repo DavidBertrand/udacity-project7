@@ -12,7 +12,7 @@ pipeline {
                     make install
                     '''
             }
-        }
+        }*/
         stage('Build') {
             steps {
                 sh 'echo "Hello World"'
@@ -28,7 +28,7 @@ pipeline {
                     pylint --disable=R,C,W1203 app/**.py
                     '''
             }
-        }*//*
+        }
         stage ('OWASP Dependency-Check Vulnerabilities') {
             steps {
                 dependencyCheck additionalArguments: ''' 
@@ -39,14 +39,9 @@ pipeline {
 
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
-        } */
-        stage('Security Scan') {
-              steps { 
-                 aquaMicroscanner imageName: 'alpine:latest', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
-              }
-         } 
-         
-        stage ('OWASP Dependency-Check Vulnerabilities'){
+        } 
+
+        stage ('OWASP Dependency-Check Vulnerabilities - Docker'){
             steps {
                 sh 'rm owasp* || true'
                 sh 'chmod +x run_owasp_dependency_check.sh'
@@ -77,6 +72,11 @@ pipeline {
                     
             }
         }
+        stage('Security Scan') {
+              steps { 
+                 aquaMicroscanner imageName: '$registry', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
+              }
+         } 
         stage('Publish') {
             steps {
                 withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
