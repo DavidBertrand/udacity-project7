@@ -13,7 +13,7 @@ pipeline {
                     make install
                     '''
             }
-        }
+        }*/
         stage('Build') {
             steps {
                 sh 'echo "Hello World"'
@@ -41,7 +41,7 @@ pipeline {
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         } 
-
+/*
         stage ('OWASP Dependency-Check Vulnerabilities - Docker'){
             steps {
                 sh 'rm owasp* || true'
@@ -49,7 +49,7 @@ pipeline {
                 sh 'bash run_owasp_dependency_check.sh'
             }
         }    
-
+*/
         stage ("Lint dockerfile") {
             agent {
                 docker {
@@ -72,12 +72,12 @@ pipeline {
                   sh 'docker build --tag=$registry .'    
                     
             }
-        }*/
+        }/*
         stage('Security Scan') {
               steps { 
                  aquaMicroscanner imageName: 'bertrand282/project7_2', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
               }
-         } 
+         } */
         stage('Publish') {
             steps {
                 withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
