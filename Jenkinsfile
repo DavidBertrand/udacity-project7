@@ -3,8 +3,9 @@ pipeline {
         registry = "bertrand282/project7_2:latest"
         registryCredential = 'dockerhub'
     }
-     agent any/*
+     agent any
      stages {
+         /*
         stage('Install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
