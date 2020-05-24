@@ -5,7 +5,7 @@ pipeline {
     }
      agent any
      stages {
-         
+         /*
         stage('Install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
@@ -49,7 +49,7 @@ pipeline {
                 sh 'bash run_owasp_dependency_check.sh'
             }
         }    
-*/
+*//*
         stage ("Lint dockerfile") {
             agent {
                 docker {
@@ -77,7 +77,7 @@ pipeline {
               steps { 
                  aquaMicroscanner imageName: 'bertrand282/project7_2', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
               }
-         } */
+         } *//*
         stage('Publish') {
             steps {
                 withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
@@ -95,7 +95,7 @@ pipeline {
               }
             }
         }
-        
+        */
         stage('Ansible Deploy') {
             steps {
                 
