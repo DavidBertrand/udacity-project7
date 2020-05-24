@@ -13,7 +13,7 @@ pipeline {
                     make install
                     '''
             }
-        }/*
+        }
         stage('Build') {
             steps {
                 sh 'echo "Hello World"'
@@ -49,7 +49,7 @@ pipeline {
                 sh 'bash run_owasp_dependency_check.sh'
             }
         }    
-*//*
+*/
         stage ("Lint dockerfile") {
             agent {
                 docker {
@@ -77,7 +77,7 @@ pipeline {
               steps { 
                  aquaMicroscanner imageName: 'bertrand282/project7_2', notCompliesCmd: 'exit 1', onDisallowed: 'fail', outputFormat: 'html'
               }
-         } *//*
+         } */
         stage('Publish') {
             steps {
                 withDockerRegistry([ credentialsId: registryCredential, url: "" ]) {
@@ -95,7 +95,7 @@ pipeline {
               }
             }
         }
-        */
+        
         stage('Ansible Deploy') {
             steps {
                 
