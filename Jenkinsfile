@@ -5,15 +5,14 @@ pipeline {
     }
      agent any
      stages {
-         /*
+         
         stage('Install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
                     . venv/bin/activate
-                    make install
                     '''
             }
-        }
+        }/*
         stage('Build') {
             steps {
                 sh 'echo "Hello World"'
@@ -100,11 +99,13 @@ pipeline {
             steps {
                 
                 script {
-                    sh  '. venv/bin/activate'
+                    
                     dir('ansible'){
 
     //                  sh "ansible-playbook playbook.yml --extra-vars \"image_id=${image_id}\""
-                        sh 'ansible-playbook  playbook.yml --private-key=~/.ssh/udacity.pem --extra-vars image_id=$registry -vvv'
+                        sh  '''. venv/bin/activate
+                             ansible-playbook  playbook.yml --private-key=~/.ssh/udacity.pem --extra-vars image_id=$registry -vvv
+                            '''
                     }
                 }
             }
