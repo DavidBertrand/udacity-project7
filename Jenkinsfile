@@ -101,13 +101,12 @@ pipeline {
                 
                 script {
                     
-                    dir('ansible'){
 
     //                  sh "ansible-playbook playbook.yml --extra-vars \"image_id=${image_id}\""
-                        sh  '''../. venv/bin/activate
-                             ansible-playbook  playbook.yml --private-key=~/.ssh/udacity.pem --extra-vars image_id=$registry -vvv
+                        sh  '''. venv/bin/activate
+                             ansible-playbook  ansible/playbook.yml --private-key=~/.ssh/udacity.pem --extra-vars image_id=$registry -vvv
                             '''
-                    }
+
                 }
             }
         }
