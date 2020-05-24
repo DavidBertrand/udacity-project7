@@ -1,5 +1,5 @@
 #!/bin/bash
-url='http://18.236.194.112'
+url='http://18.236.194.112:32000'
 attempts=5
 timeout=5
 online=false

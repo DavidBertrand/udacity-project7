@@ -112,7 +112,7 @@ pipeline {
         }
         stage('Test Application'){
             steps{
-                sh 'run_app_status_check.sh'
+                sh './run_app_status_check.sh '
             }
         }
        
