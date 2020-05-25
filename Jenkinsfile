@@ -37,14 +37,6 @@ pipeline {
                     image 'hadolint/hadolint:latest-debian'
                 }
             }
-
-        stage ('OWASP Dependency-Check Vulnerabilities - Docker'){
-            steps {
-                sh 'rm owasp* || true'
-                sh 'chmod +x run_owasp_dependency_check.sh'
-                sh 'bash run_owasp_dependency_check.sh'
-            }
-        } 
             steps {
                 //sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
                 script {
@@ -67,8 +59,15 @@ pipeline {
                     sh 'exit 1'
                 }
             }
+        
         }
-            
+        stage ('OWASP Dependency-Check Vulnerabilities - Docker'){
+            steps {
+                sh 'rm owasp* || true'
+                sh 'chmod +x run_owasp_dependency_check.sh'
+                sh 'bash run_owasp_dependency_check.sh'
+            }
+        } 
         
         stage('Build Docker image') {
             steps {
