@@ -5,7 +5,7 @@ pipeline {
     }
      agent any
      stages {
-         
+         /*
         stage('Install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
@@ -29,18 +29,7 @@ pipeline {
                     pylint --disable=R,C,W1203 app/**.py
                     '''
             }
-        }/*
-        stage ('OWASP Dependency-Check Vulnerabilities') {
-            steps {
-                dependencyCheck additionalArguments: ''' 
-                    -o "./" 
-                    -s "./"
-                    -f "ALL" 
-                    --prettyPrint''', odcInstallation: 'OWASP-DC'
-
-                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-            }
-        } */
+        }
 
         stage ('OWASP Dependency-Check Vulnerabilities - Docker'){
             steps {
@@ -48,8 +37,8 @@ pipeline {
                 sh 'chmod +x run_owasp_dependency_check.sh'
                 sh 'bash run_owasp_dependency_check.sh'
             }
-        }   */ 
-
+        } 
+*/
         stage ("Lint dockerfile") {
             agent {
                 docker {
