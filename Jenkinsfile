@@ -51,11 +51,11 @@ pipeline {
                             def lintResult = sh returnStdout: true, script: 'hadolint Dockerfile | tee -a hadolint_lint.txt'
                             if (lintResult.trim() == '') {
                                 println 'Lint finished with no errors'
-                                currentBuild.result = 'FAILURE'
+                                currentBuild.result = 'SUCCESS'
                             } else {
                                 println 'Error found in Lint'
                                 println "${lintResult}"
-                                currentBuild.result = 'UNSTABLE'
+                                currentBuild.result = 'FAILURE'
                             }
                         }
             }
