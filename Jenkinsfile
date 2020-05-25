@@ -46,11 +46,13 @@ pipeline {
                 }
             }
             steps {
-                
-                def lintResult = sh returnStdout: true, script: 'hadolint Dockerfile | tee -a hadolint_lint.txt'
-                if (lintResult.trim() != '') {
-                   sh 'exit 1'
-                }
+                script { CHANGED = "NO" }
+                sh 'hadolint Dockerfile | tee -a hadolint_lint.txt || true'
+            }
+            post {
+                success { script { STATUS = "SUCCESS" } }
+                failure { script { STATUS = "FAILURE" } }
+                changed { script { CHANGED = "YES" } }  
             }
             post {
                 always {
