@@ -46,7 +46,17 @@ pipeline {
                 }
             }
             steps {
-                sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
+                //sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
+                script {
+                            def lintResult = sh returnStdout: true, script: 'docker run --rm -i lukasmartinelli/hadolint < Dockerfile'
+                            if (lintResult.trim() == '') {
+                                println 'Lint finished with no errors'
+                            } else {
+                                println 'Error found in Lint'
+                                println "${lintResult}"
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
             }
             post {
                  failure {
