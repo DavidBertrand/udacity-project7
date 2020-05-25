@@ -48,7 +48,7 @@ pipeline {
                 sh 'chmod +x run_owasp_dependency_check.sh'
                 sh 'bash run_owasp_dependency_check.sh'
             }
-        }    
+        }   */ 
 
         stage ("Lint dockerfile") {
             agent {
@@ -57,7 +57,15 @@ pipeline {
                 }
             }
             steps {
-                sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
+                sh 
+                def lintResult = sh returnStdout: true, script: 'hadolint Dockerfile | tee -a hadolint_lint.txt'
+                if (lintResult.trim() == '') {
+                    println 'hadolint finished with no errors'
+                } else {
+                    println 'Error found in hadolint'
+                    println "${lintResult}"
+                    currentBuild.result = 'UNSTABLE'
+                }
             }
             post {
                 always {
