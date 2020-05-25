@@ -9,7 +9,7 @@ COPY ./app /app
 COPY . requirements.txt /app/
 
 # upgrade pip and install required python packages
-RUN pip install --upgrade pip &&\
+RUN pip install --upgrade pip==20.0.2 &&\
     pip install --trusted-host pypi.python.org -r requirements.txt
 
 

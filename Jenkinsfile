@@ -30,6 +30,13 @@ pipeline {
                     '''
             }
         }
+        stage ('OWASP Dependency-Check Vulnerabilities - Docker'){
+            steps {
+                sh 'rm owasp* || true'
+                sh 'chmod +x run_owasp_dependency_check.sh'
+                sh 'bash run_owasp_dependency_check.sh'
+            }
+        } 
 
         stage ("Lint dockerfile") {
             agent {
@@ -61,13 +68,7 @@ pipeline {
             }
         
         }
-        stage ('OWASP Dependency-Check Vulnerabilities - Docker'){
-            steps {
-                sh 'rm owasp* || true'
-                sh 'chmod +x run_owasp_dependency_check.sh'
-                sh 'bash run_owasp_dependency_check.sh'
-            }
-        } 
+
         
         stage('Build Docker image') {
             steps {
