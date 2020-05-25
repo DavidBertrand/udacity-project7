@@ -53,7 +53,7 @@ pipeline {
                     println 'hadolint finished with no errors'
                 } else {
                     println 'Error found in hadolint'
-                    println "${lintResult}"
+                    println '$lintResult'
                     currentBuild.result = 'UNSTABLE'
                 }
             }
