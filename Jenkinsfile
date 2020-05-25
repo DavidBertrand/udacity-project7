@@ -49,6 +49,9 @@ pipeline {
                 sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
             }
             post {
+                 failure {
+                    sh 'exit 1'
+                }
                 always {
                     archiveArtifacts 'hadolint_lint.txt'
                 }
