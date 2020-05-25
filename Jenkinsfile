@@ -31,6 +31,13 @@ pipeline {
             }
         }
 
+        stage ("Lint dockerfile") {
+            agent {
+                docker {
+                    image 'hadolint/hadolint:latest-debian'
+                }
+            }
+
         stage ('OWASP Dependency-Check Vulnerabilities - Docker'){
             steps {
                 sh 'rm owasp* || true'
@@ -38,13 +45,6 @@ pipeline {
                 sh 'bash run_owasp_dependency_check.sh'
             }
         } 
-
-        stage ("Lint dockerfile") {
-            agent {
-                docker {
-                    image 'hadolint/hadolint:latest-debian'
-                }
-            }
             steps {
                 //sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
                 script {
