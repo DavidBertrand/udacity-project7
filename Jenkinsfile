@@ -46,7 +46,7 @@ pipeline {
                 }
             }
             steps {
-                sh 
+                
                 def lintResult = sh returnStdout: true, script: 'hadolint Dockerfile | tee -a hadolint_lint.txt'
                 if (lintResult.trim() != '') {
                    sh 'exit 1'
