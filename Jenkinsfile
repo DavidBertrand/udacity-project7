@@ -53,13 +53,13 @@ pipeline {
                 success { script { STATUS = "SUCCESS" } }
                 failure { script { STATUS = "FAILURE" } }
                 changed { script { CHANGED = "YES" } }  
-            }
-            post {
                 always {
                     archiveArtifacts 'hadolint_lint.txt'
                 }
             }
         }
+            
+        
         stage('Build Docker image') {
             steps {
                 
