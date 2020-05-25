@@ -51,6 +51,7 @@ pipeline {
                             def lintResult = sh returnStdout: true, script: 'hadolint Dockerfile | tee -a hadolint_lint.txt'
                             if (lintResult.trim() == '') {
                                 println 'Lint finished with no errors'
+                                currentBuild.result = 'FAILURE'
                             } else {
                                 println 'Error found in Lint'
                                 println "${lintResult}"
@@ -59,11 +60,11 @@ pipeline {
                         }
             }
             post {
-                 failure {
-                    sh 'exit 1'
-                }
                 always {
                     archiveArtifacts 'hadolint_lint.txt'
+                }
+                failure {
+                    sh 'exit 1'
                 }
             }
         }
