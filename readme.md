@@ -9,11 +9,10 @@ DockerHub [repository](https://hub.docker.com/r/bertrand282/project7)
 
 ## 1. Execute linting steps in pipelime
 
-### Pylint:
-
-### Hadolint:
-
-Problem![Failed](screenshots/screenshot.png)
+### Failed Pylint:
+![Failed](screenshots/FailedLint.png)
+### Failed Hadolint:
+![Failed](screenshots/FailedHadoLint.png)
 
 ## 2. Build a Docker container in a pipeline
 
