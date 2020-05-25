@@ -48,7 +48,7 @@ pipeline {
             steps {
                 //sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
                 script {
-                            def lintResult = sh returnStdout: true, script: 'docker run --rm -i lukasmartinelli/hadolint < Dockerfile'
+                            def lintResult = sh returnStdout: true, script: 'docker run --rm -i hadolint/hadolint < Dockerfile'
                             if (lintResult.trim() == '') {
                                 println 'Lint finished with no errors'
                             } else {
