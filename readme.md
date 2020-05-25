@@ -5,15 +5,24 @@ Github [repository](https://github.com/DavidBertrand/udacity-project7)
 ## 2. Use image repository to store Docker images
 DockerHub [repository](https://hub.docker.com/r/bertrand282/project7)
 
+# ***Build Docker Container***
+
+## 1. Execute linting steps in pipelime
+
+### Pylint:
+
+### Hadolint:
+
+Problem![Failed](screenshots/screenshot.png)
+
+## 2. Build a Docker container in a pipeline
+
+
 # ***Successful Deployment***
 
 ## 1. The Docker container is deployed to a Kubernetes cluster
 
-### Pylint
-### Hadolint:
-![Failed](screenshot.png)
-
-## 2. Use Blue/Green Deployment or a Rolling Deployment successfully
+## 2.Use Blue/Green Deployment or a Rolling Deployment successfully
 
 # ***Suggestions to Make Your Project Stand Out!***
 1. Perform additional CI steps in the pipeline outside of just linting.

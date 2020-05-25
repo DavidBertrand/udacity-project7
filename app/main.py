@@ -13,7 +13,7 @@ def main():
     message = os.getenv("MESSAGE", "no message specified")
 
     # render plain text nicely in HTML
-    html_text = font.renderText(message)\
+    html_text = font.renderText(message)
             .replace(" ","&nbsp;")\
             .replace(">","&gt;")\
             .replace("<","&lt;")\
