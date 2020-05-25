@@ -73,7 +73,7 @@ pipeline {
                     
             }
         }
-        */
+        
         stage('Security Scan') {
               steps { 
                  aquaMicroscanner imageName: 'bertrand282/project7_2', notCompliesCmd: 'exit 1', onDisallowed: 'ignore', outputFormat: 'html'
