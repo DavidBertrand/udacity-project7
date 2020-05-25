@@ -48,10 +48,7 @@ pipeline {
             }
             steps {
                 def lintResult = sh returnStdout: true, script: 'hadolint Dockerfile | tee -a hadolint_lint.txt'
-                if (lintResult.trim() == '') {
-                    println 'hadolint finished with no errors'
-                } else {
-                    println 'Error found in hadolint'
+                if (lintResult.trim() != '') {
                     sh 'exit 1'
                 }
             }
