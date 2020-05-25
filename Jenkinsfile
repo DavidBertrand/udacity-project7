@@ -46,13 +46,9 @@ pipeline {
                 }
             }
             steps {
-                script { CHANGED = "NO" }
-                sh 'hadolint Dockerfile | tee -a hadolint_lint.txt || true'
+                sh 'hadolint Dockerfile | tee -a hadolint_lint.txt'
             }
             post {
-                success { script { STATUS = "SUCCESS" } }
-                failure { script { STATUS = "FAILURE" } }
-                changed { script { CHANGED = "YES" } }  
                 always {
                     archiveArtifacts 'hadolint_lint.txt'
                 }
