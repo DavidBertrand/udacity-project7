@@ -5,7 +5,7 @@ pipeline {
     }
      agent any
      stages {
-         /*
+         
         stage('Install dependencies') {
             steps {
                 sh  '''python3 -m venv venv
@@ -38,7 +38,7 @@ pipeline {
                 sh 'bash run_owasp_dependency_check.sh'
             }
         } 
-*/
+
         stage ("Lint dockerfile") {
             agent {
                 docker {
